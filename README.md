@@ -416,7 +416,7 @@ A tabela `dp[k][v]` armazena **quantas formas existem de obter `V` usando moedas
 
 ### **📌 (d) Implementação com Programação Dinâmica**
 
-```
+```cpp
 int contarFormasDP(const vector<int>& moedas, int V) {
     int n = moedas.size();
     vector<vector<int>> dp(n+1, vector<int>(V+1, 0));
