@@ -1,6 +1,6 @@
 // troco_memo.cpp
 // Implementação recursiva do problema do troco com memoization.
-// Para compilar: g++ -std=c++11 troco_memo.cpp -o troco_memo
+// Para compilar: g++ -std=c++11 problema-troco-memo.cpp -o problema-troco-memo
 #include <iostream>
 #include <vector>
 #include <climits>

@@ -1,6 +1,6 @@
 // troco_guloso.cpp
 // Implementação do problema do troco utilizando o método guloso.
-// Para compilar: g++ -std=c++11 troco_guloso.cpp -o troco_guloso
+// Para compilar: g++ -std=c++11 problema-troco-guloso.cpp -o troco-guloso
 #include <iostream>
 #include <vector>
 #include <algorithm>

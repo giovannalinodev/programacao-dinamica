@@ -31,6 +31,14 @@ Cada problema é estruturado em uma pasta separada, contendo código-fonte, expl
 
 ---
 
+## 🏗️ **Exemplo para compilar e executar**
+1. **Compilar um arquivo específico:**
+   ```bash
+   g++ -std=c++11 problema-abastecimento/problema-abastecimento.cpp -o abastecimento
+   ```
+
+---
+
 ## 🔍 **Problemas Resolvidos**
 
 ## 📌 **1. Problema do Troco**
@@ -41,6 +49,141 @@ Cada problema é estruturado em uma pasta separada, contendo código-fonte, expl
   - **Memoization**
   - **Programação Dinâmica**
 - Código-fonte em: `/problema-troco/`
+
+### 📌 **(a) Solução Usando o Método Guloso**
+O método guloso **seleciona sempre a maior moeda disponível primeiro**, antes de considerar as menores.
+
+```cpp
+int trocoGuloso(vector<int> moedas, int V) {
+    sort(moedas.rbegin(), moedas.rend()); // Ordena em ordem decrescente
+    int count = 0;
+    for (int moeda : moedas) {
+        int num = V / moeda;
+        count += num;
+        V -= num * moeda;
+    }
+    return (V == 0 ? count : -1); // Se sobrar troco, o método falhou
+}
+```
+### 📌 (b) Quando o Método Guloso Funciona ou Falha
+- O método guloso funciona bem se o sistema de moedas for canônico (qualquer valor pode ser formado combinando as menores denominações de maneira ótima).
+
+**Situações em que o método guloso funciona:**
+
+- Sistemas bem estruturados, como {1, 5, 10, 25} (moedas comuns).
+Quando cada moeda é um múltiplo da anterior.
+
+**Situações em que o método guloso falha:**
+
+- Sistemas não canônicos, como {1, 3, 4} para V = 6. O método guloso escolheria (4,1,1) → 3 moedas, mas a solução ótima seria (3,3) → 2 moedas.
+
+### 📌 (c) Implementação Recursiva do Problema do Troco
+
+A abordagem recursiva usa a seguinte relação de recorrência:
+
+
+$$
+troco(C, V) =
+\begin{cases} 
+0, & \text{se } V = 0  \text{ (não há moedas necessárias)}\\
+\infty, & \text{se } V < 0  \text{ (não há solução)} \\
+1 + \min(troco(C, V - c_i)), & \forall c_i \in C, \text{ se } V > 0
+\end{cases}
+$$
+
+```cpp
+int trocoRecursivo(const vector<int>& moedas, int V) {
+    if (V == 0) return 0;
+    if (V < 0) return INT_MAX;
+    
+    int minMoedas = INT_MAX;
+    for (int c : moedas) {
+        int res = trocoRecursivo(moedas, V - c);
+        if (res != INT_MAX)
+            minMoedas = min(minMoedas, res + 1);
+    }
+    return minMoedas;
+}
+
+(problema-troco-recursivo.cpp implementa corretamente essa abordagem.)
+```
+
+### 📌 (d) Solução Usando Programação Dinâmica
+A programação dinâmica (bottom-up) evita recálculos desnecessários preenchendo uma tabela de resultados intermediários.
+
+#### 📌 **Estrutura da Tabela `dp[v]`**
+
+Cada posição `dp[v]` representa **o menor número de moedas necessárias para formar `V`**.
+
+#### **Preenchimento da Tabela**
+| `V`               | `0` | `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` | `10` |
+|-------------------|----|----|----|----|----|----|----|----|----|----|----|
+| **Moedas `{1,3,5}`** | 0  | 1  | 1  | 1  | 2  | 1  | 2  | 2  | 3  | 3  | 2  |
+
+📌 **Lógica da tabela**  
+- **Cada coluna `V`** representa um valor a ser obtido.  
+- **Cada célula `dp[v]`** contém o **número mínimo de moedas** necessárias para alcançar `V`.  
+- Por exemplo, para `V = 7`, a solução ótima usa **2 moedas** `{3, 3, 1}`.
+
+---
+
+## 📌 **Implementação com Programação Dinâmica**
+```cpp
+int trocoDP(const vector<int>& moedas, int V) {
+    vector<int> dp(V+1, INT_MAX);
+    dp[0] = 0;  // Caso base: zero moedas necessárias para formar o valor 0
+
+    for (int v = 1; v <= V; v++) {
+        for (int c : moedas) {
+            if (v - c >= 0 && dp[v - c] != INT_MAX) {
+                dp[v] = min(dp[v], dp[v - c] + 1);
+            }
+        }
+    }
+    return dp[V];
+}
+```
+
+### 📌 (e) Solução com Memoization
+A versão otimizada com Memoization reduz chamadas recursivas armazenando resultados.
+
+```cpp
+int trocoMemo(const vector<int>& moedas, int V, vector<int>& memo) {
+    if (V == 0) return 0;
+    if (V < 0) return INT_MAX;
+    if (memo[V] != -1) return memo[V];
+
+    int minMoedas = INT_MAX;
+    for (int c : moedas) {
+        int res = trocoMemo(moedas, V - c, memo);
+        if (res != INT_MAX)
+            minMoedas = min(minMoedas, res + 1);
+    }
+    memo[V] = minMoedas;
+    return memo[V];
+}
+```
+
+### 📌 **Resultados Obtidos para o Problema do Troco**
+
+A tabela abaixo apresenta a **quantidade mínima de moedas encontradas** por cada abordagem:
+
+| **Método**            | **Mínimo Número de Moedas** |
+|-----------------------|---------------------------|
+| **Guloso**           | 2                           |
+| **Recursivo**        | 3                           |
+| **Memoization**      | 3                           |
+| **Programação Dinâmica (DP)** | 3                  |
+
+---
+📌 **Conclusão:**
+- O **método guloso** encontrou **2 moedas**, mas esse **não é o resultado ótimo**, pois o método **não garante a melhor solução para todos os sistemas de moedas**.
+- As abordagens **Recursiva, Memoization e Programação Dinâmica** encontraram **a solução correta de 3 moedas**.
+- **DP e Memoization são as abordagens mais eficientes** para sistemas maiores, pois evitam recomputação excessiva.
+
+
+
+
 
 ## 📌 **2. Problema do Abastecimento de Combustível**
 - Objetivo: Determinar o **menor tempo possível** gasto nos postos de combustível para percorrer uma estrada entre duas cidades `C1` e `C2`.
@@ -324,9 +467,4 @@ Contagem de formas usando Programação Dinâmica: Tabela DP (contar formas): 1 
 
 
 
-## 🏗️ **Exemplo para compilar e executar**
-1. **Compilar um arquivo específico:**
-   ```bash
-   g++ -std=c++11 problema-abastecimento/problema-abastecimento.cpp -o abastecimento
-   ```
 

@@ -1,6 +1,6 @@
 // troco_dp.cpp
 // Implementação do problema do troco usando programação dinâmica (bottom-up).
-// Para compilar: g++ -std=c++11 troco_dp.cpp -o troco_dp
+// Para compilar: g++ -std=c++11 problema-troco-dp.cpp -o problema-troco-dp
 #include <iostream>
 #include <vector>
 #include <climits>

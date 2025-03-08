@@ -1,6 +1,6 @@
 // troco_recursivo.cpp
 // Implementação recursiva do problema do troco (sem memoization).
-// Para compilar: g++ -std=c++11 troco_recursivo.cpp -o troco_recursivo
+// Para compilar: g++ -std=c++11 problema-troco-recursivo.cpp -o troco_recursivo
 #include <iostream>
 #include <vector>
 #include <climits>
