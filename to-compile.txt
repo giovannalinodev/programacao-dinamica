@@ -1,0 +1,14 @@
+# Compilando o problema do abastecimento
+g++ -std=c++11 abastecimento/problema-abastecimento.cpp -o problema-abastecimento
+
+# Compilando o problema da loja de livros
+g++ -std=c++11 livros/problema-loja-livros.cpp -o problema-loja-livros
+
+# Compilando o problema das moedas (conta de formas)
+g++ -std=c++11 moedas/problema-conta-moedas.cpp -o problema-conta-moedas
+
+# Compilando as variações do problema do troco
+g++ -std=c++11 troco/problema-troco-guloso.cpp -o problema-troco-guloso
+g++ -std=c++11 troco/problema-troco-memo.cpp   -o problema-troco-memo
+g++ -std=c++11 troco/problema-troco-pd.cpp     -o problema-troco-pd
+g++ -std=c++11 troco/problema-troco-recursivo.cpp -o problema-troco-recursivo
