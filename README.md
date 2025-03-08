@@ -467,6 +467,13 @@ Contagem de formas usando Programação Dinâmica: Tabela DP (contar formas): 1 
 - Para **valores grandes**, a **Programação Dinâmica é muito mais eficiente**, pois **evita cálculos repetidos**.
 - **A DP cresce polinomialmente (`O(n*V)`) e é a melhor escolha para grandes valores de `V`**.
 
+---
+
+## ✅ Conclusão geral
+- O trabalho engloba as questões respondidas de forma clara e detalhada tanto no README.md quanto nos códigos. 
+
+- Cada problema foi solucionado com as implementações necessárias, incluindo métodos gulosos, recursão, memoization e programação dinâmica, além de casos de teste e análises de desempenho comparativas.
+
 
 
 
