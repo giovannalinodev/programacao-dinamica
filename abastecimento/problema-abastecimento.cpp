@@ -1,5 +1,5 @@
 // Implementação do problema do abastecimento de combustível usando programação dinâmica.
-// Para compilar: g++ -std=c++11 abastecimento.cpp -o abastecimento
+// Para compilar: g++ -std=c++11 problema-abastecimento.cpp -o problema-abastecimento
 #include <iostream>
 #include <vector>
 #include <climits>
