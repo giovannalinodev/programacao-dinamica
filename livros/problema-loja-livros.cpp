@@ -1,10 +1,11 @@
-// loja_livros.cpp
 // Problema da loja de livros: maximizar o número de páginas adquiridas com um orçamento fixo.
-// Para compilar: g++ -std=c++11 loja_livros.cpp -o loja_livros
+// Para compilar: g++ -std=c++11 problema-loja-livros.cpp -o problema-loja-livros
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <chrono> // Biblioteca para medir tempo de execução
 using namespace std;
+using namespace std::chrono;
 
 // Solução usando backtracking
 int maxPaginasBacktracking(int i, int orcamento, const vector<int>& preco, const vector<int>& paginas) {
@@ -56,12 +57,20 @@ int main(){
     int X = 50; // Orçamento
     
     cout << "Resolução com Backtracking:" << endl;
+    auto startBT = high_resolution_clock::now();
     int paginasMaxBT = maxPaginasBacktracking(0, X, preco, paginas);
-    cout << "Máximo de páginas (Backtracking): " << paginasMaxBT << endl << endl;
+    auto stopBT = high_resolution_clock::now();
+    auto durationBT = duration_cast<microseconds>(stopBT - startBT);
+    cout << "Máximo de páginas (Backtracking): " << paginasMaxBT << endl;
+    cout << "Tempo de execução (Backtracking): " << durationBT.count() << " microssegundos" << endl << endl;
     
     cout << "Resolução com Programação Dinâmica:" << endl;
+    auto startDP = high_resolution_clock::now();
     int paginasMaxDP = maxPaginasDP(preco, paginas, X);
+    auto stopDP = high_resolution_clock::now();
+    auto durationDP = duration_cast<microseconds>(stopDP - startDP);
     cout << "Máximo de páginas (DP): " << paginasMaxDP << endl;
-    
+    cout << "Tempo de execução (DP): " << durationDP.count() << " microssegundos" << endl;
+
     return 0;
 }
