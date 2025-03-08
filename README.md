@@ -39,6 +39,7 @@ Cada problema é estruturado em uma pasta separada, contendo código-fonte, expl
 1. **Compilar um arquivo específico:**
    ```bash
    g++ -std=c++11 problema-abastecimento/problema-abastecimento.cpp -o abastecimento
+   ./abastecimento
    ```
 
 ---
