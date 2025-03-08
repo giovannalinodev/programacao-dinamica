@@ -1,6 +1,10 @@
 # 📚 Trabalho de Programação Dinâmica - Algoritmos
 
-Este repositório contém a implementação de problemas resolvidos utilizando **Programação Dinâmica (DP)**. 
+Este repositório contém a implementação de **problemas resolvidos com Programação Dinâmica (DP)**.
+
+O objetivo é **explorar diferentes estratégias algorítmicas** para otimizar a resolução de problemas combinatórios e de otimização.
+
+Cada problema apresentado é resolvido utilizando **abordagens recursivas, memoization e programação dinâmica (bottom-up)**, além da comparação com outras abordagens como **algoritmos gulosos e backtracking**.
 
 ---
 
