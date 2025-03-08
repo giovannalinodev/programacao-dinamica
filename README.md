@@ -196,7 +196,7 @@ Tabela DP: 0 0 0 0 0 0 0 0 0 0 60 60 60 60 60 60 60 60 60 60 100 100 100 100 100
 | **Backtracking** | ✅ 220 | **1 microssegundo** |
 | **Programação Dinâmica** | ✅ 220 | **230 microssegundos** |
 
-📌 **Conclusão**
+📌 **Explicação**
 - Para **entradas pequenas**, o **Backtracking pode ser mais rápido** porque **não precisa preencher toda a tabela DP**.
 - Para **entradas grandes**, o **Backtracking se torna inviável**, pois seu tempo de execução **cresce exponencialmente**.
 - **A DP cresce polinomialmente (`O(N*X)`) e é a melhor abordagem para grandes conjuntos de dados**.
@@ -213,10 +213,120 @@ Tabela DP: 0 0 0 0 0 0 0 0 0 0 60 60 60 60 60 60 60 60 60 60 100 100 100 100 100
 - Código-fonte em: `/problema-conta-moedas/`
 
 ---
+### 📌 (a) Definição da Função de Recorrência
+
+O número de formas distintas \( f(k, V) \) de formar um valor \( V \) usando moedas a partir do índice \( k \) é dado por:
+
+$$
+f(k, V) =
+\begin{cases} 
+1, & \text{se } V = 0  \text{ (existe uma forma: não usar nenhuma moeda)}\\
+0, & \text{se } V < 0  \text{ ou } k \geq n \text{ (sem formas válidas)} \\
+f(k, V - C_k) + f(k+1, V), & \text{caso contrário}
+\end{cases}
+$$
+
+
+**Explicação:**
+- **Caso Base 1:** Se `V = 0`, há exatamente **1 forma** de obtê-lo (não usar moedas).
+- **Caso Base 2:** Se `V < 0` ou **não há mais moedas disponíveis (`k >= n`)**, não há solução.
+- **Caso Recursivo:** Podemos:
+  - **Usar a moeda `C[k]`** (diminuir `V` e permanecer com `C[k]`).
+  - **Pular para a próxima moeda** `C[k+1]` e tentar formar `V` sem `C[k]`.
+
+---
+
+### **📌 (b) Implementação da Função Recursiva**
+A função `contarFormasRec()` usa a relação de recorrência para contar todas as formas possíveis:
+```cpp
+int contarFormasRec(const vector<int>& moedas, int V, int k) {
+    if (V == 0) return 1;      // Se V == 0, há exatamente 1 forma (não usar moedas)
+    if (V < 0 || k >= moedas.size()) return 0;  // Sem solução válida
+    // Opção 1: Usar a moeda C[k] e continuar usando-a
+    int usar = contarFormasRec(moedas, V - moedas[k], k);
+    // Opção 2: Pular para a próxima moeda
+    int pular = contarFormasRec(moedas, V, k + 1);
+    return usar + pular;
+}
+```
+
+### 📌 (c) Definição da Tabela de Programação Dinâmica
+
+A tabela `dp[k][v]` armazena **quantas formas existem de obter `V` usando moedas de `k` em diante**.
+
+#### **Estrutura da Tabela**
+| Moedas (`k`) | `0` | `1` | `2` | `3` | `4` | `5` | `6` | `7` | `8` | `9` |
+|--------------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+| **`C[0]=2`** | 1   | 0   | 1   | 1   | 1   | 2   | 2   | 2   | 3   | 3   |
+| **`C[1]=3`** | 1   | 0   | 0   | 1   | 0   | 1   | 1   | 0   | 1   | 1   |
+| **`C[2]=5`** | 1   | 0   | 0   | 0   | 0   | 1   | 0   | 0   | 0   | 0   |
+
+📌 **Explicação**
+- Cada **linha representa uma moeda** do conjunto `{C1, C2, ..., Cn}`.
+- Cada **coluna `v` representa um valor-alvo `V`** a ser obtido com as moedas disponíveis.
+- O valor `dp[k][v]` indica **quantas formas distintas existem para formar `V`** utilizando as moedas **de `k` em diante**.
+
+
+### **📌 (d) Implementação com Programação Dinâmica**
+
+```
+int contarFormasDP(const vector<int>& moedas, int V) {
+    int n = moedas.size();
+    vector<vector<int>> dp(n+1, vector<int>(V+1, 0));
+    
+    // Caso base: Para V = 0, sempre há 1 forma de formar o valor (não usar moedas)
+    for (int k = 0; k <= n; k++) {
+        dp[k][0] = 1;
+    }
+    
+    // Preenche a tabela DP de baixo para cima
+    for (int k = n - 1; k >= 0; k--) {
+        for (int v = 1; v <= V; v++) {
+            int usar = (v - moedas[k] >= 0) ? dp[k][v - moedas[k]] : 0;
+            int pular = dp[k+1][v];
+            dp[k][v] = usar + pular;
+        }
+    }
+
+    return dp[0][V];
+}
+```
+
+### 📌 (e) Análise de Desempenho
+
+Executando o código, obtemos:
+```
+Contagem de formas usando Recursão: Resultado: 3 Tempo de execução (Recursão): 2 microssegundos
+```
+
+```
+Contagem de formas usando Programação Dinâmica: Tabela DP (contar formas): 1 0 1 1 1 2 2 2 3 3 1 0 0 1 0 1 1 0 1 1 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 Resultado: 3 Tempo de execução (DP): 72 microssegundos
+```
+
+---
+
+### **Comparação de Desempenho**
+
+| **Método**                | **Formas encontradas** | **Tempo de Execução** |
+|---------------------------|-----------------------|----------------------|
+| **Recursão**              | ✅ 3                   | **2 microssegundos**  |
+| **Programação Dinâmica**  | ✅ 3                   | **72 microssegundos** |
+
+---
+
+### 📌 **Explicação**
+- Para **valores pequenos (`V` pequeno)**, a **Recursão pode ser mais rápida** porque **não precisa preencher a tabela DP**.
+- Para **valores grandes**, a **Programação Dinâmica é muito mais eficiente**, pois **evita cálculos repetidos**.
+- **A DP cresce polinomialmente (`O(n*V)`) e é a melhor escolha para grandes valores de `V`**.
+
+
+
+
+
 
 ## 🏗️ **Exemplo para compilar e executar**
 1. **Compilar um arquivo específico:**
    ```bash
    g++ -std=c++11 problema-abastecimento/problema-abastecimento.cpp -o abastecimento
-
+   ```
 
